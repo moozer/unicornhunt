@@ -36,6 +36,12 @@ class gameField( uhgraphics ):
         self._screen = self._screen.convert()
         self._addTiles()
 
+    @property
+    def tilesGeo( self ):
+        return self._tilesGeo
+    
+    def tilePos( self, tileXY ):
+        return point( tileXY.x*self._tileSize.x, tileXY.y*self._tileSize.y )
     
 if __name__ == "__main__":
     pygame.init()

@@ -38,6 +38,10 @@ if __name__ == "__main__":
     gf = gameField( tilesGeo, debugprint=dprint )
     # --- game field part -------
 
+    # --- units part -------
+    unicorn = unit( unitList['unicorn'], gf, point(10,10) )
+    cr.addMessage( "system", "Unicorn at %s"%( unicorn.pos, ) )
+    # --- units part -------
 
 
     # Blit everything to the screen
@@ -58,6 +62,9 @@ if __name__ == "__main__":
         if cr.dirty:
             cr.update( screen, crOffset)
 
+        if unicorn.dirty:
+            unicorn.update( screen, gfOffset)
+            
         pygame.display.flip()
 
 

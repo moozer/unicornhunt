@@ -41,32 +41,38 @@ class tile( uhgraphics ):
     
 
 class unit( uhgraphics ):
-    def __init__( self, info, gamefieldInfo ):
+    def __init__( self, info, gamefield, initialPos = point(0,0) ):
         self._screen =  pygame.image.load( info.filename )
-        self._pos = point( 0,0 )
-        self._gamefieldInfo = gamefieldInfo
+        self._pos = initialPos
         self._dirty = True
+        self._gamefield = gamefield
         
     @property
     def pos( self ):
-        return pos
+        return self._pos
 
     def moveLeft( self ):
-        if pos.x > 0:
-            pos.x -= 1
+        if self._pos.x > 0:
+            self._pos.x -= 1
             self._dirty = True
     
     def moveRight( self ):
-        if pos.x < self._gamefieldInfo.size.x:
-            pos.x += 1
+        if self._pos.x < self._gamefield.tilesGeo.x:
+            self._pos.x += 1
             self._dirty = True
     
     def moveUp( self ):
-        if pos.y > 0:
-            pos.y -= 1
+        if self._pos.y > 0:
+            self._pos.y -= 1
             self._dirty = True
 
     def moveDown( self ):
-        if pos.y < self._gamefieldInfo.size.y:
-            pos.y -= 1
+        if self._pos.y < self._gamefield.tilesGeo.y:
+            self._pos.y -= 1
             self._dirty = True
+
+    def update( self, screen, gfOffset ):
+        tilePos = self._gamefield.tilePos( self._pos )
+        unitOffset = (gfOffset.x + tilePos.x, gfOffset.y + tilePos.y )
+        screen.blit(self.screen, unitOffset)
+        self._dirty = False
