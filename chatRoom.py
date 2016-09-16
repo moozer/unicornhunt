@@ -5,9 +5,8 @@ from collections import namedtuple
 point = namedtuple( 'point', ['x', 'y'] )
 
 class chatRoom():
-    def __init__( self, size, offset = point( 0,0 ) ):
+    def __init__( self, size ):
         self._size = size
-        self._offset = offset
 
         self._fontSize = 24
         self._font = pygame.font.Font(None, self._fontSize)
@@ -88,3 +87,4 @@ if __name__ == "__main__":
 
         screen.blit(cr.screen, (0, 0))
         pygame.display.flip()
+
