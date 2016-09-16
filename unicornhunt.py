@@ -10,8 +10,8 @@ from chatRoom import chatRoom
 
 if __name__ == "__main__":
     pygame.init()
-    FPS = 30 # frames per second setting
-    fpsClock = pygame.time.Clock()
+#    FPS = 30 # frames per second setting
+#    fpsClock = pygame.time.Clock()
 
     tilesGeo =  point( 31, 21 )
     screenSize = point( 1200, 700 )
@@ -39,8 +39,12 @@ if __name__ == "__main__":
     # --- game field part -------
 
     # --- units part -------
-    unicorn = unit( unitList['unicorn'], gf, point(10,10) )
+    unicorn = unit( unitList['unicorn'], gf, point(0,0) )
     cr.addMessage( "system", "Unicorn at %s"%( unicorn.pos, ) )
+    badguy = unit( unitList['badguy'], gf, point(10,10) )
+    cr.addMessage( "system", "Badguy at %s"%( badguy.pos, ) )
+    maiden = unit( unitList['maiden'], gf, point(20,20) )
+    cr.addMessage( "system", "maiden at %s"%( maiden.pos, ) )
     # --- units part -------
 
 
@@ -52,6 +56,7 @@ if __name__ == "__main__":
     # Event loop
     quitLoop = False
     while not quitLoop:
+        refresh = False
         for event in pygame.event.get():
             if event.type == QUIT:
                 quitLoop = True
@@ -67,14 +72,21 @@ if __name__ == "__main__":
                     unicorn.moveUp()
 
         if gf.dirty:
+            print "gf update"
             gf.update( screen, gfOffset)
+            for unit in [unicorn, maiden, badguy]:
+                print "%s update"%(unit.name, )
+                unit.update( screen, gfOffset)
+            refresh = True
             
         if cr.dirty:
+            print "cr update"
             cr.update( screen, crOffset)
+            refresh = True
 
-        if unicorn.dirty:
-            unicorn.update( screen, gfOffset)
-            
-        pygame.display.flip()
+        if refresh:
+            print "refreshing"
+            pygame.display.flip()
+            refresh = False
 
 
