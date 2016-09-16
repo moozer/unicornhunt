@@ -3,7 +3,7 @@ from pygame.locals import *
 
 from uhsupport import *
 
-class chatRoom():
+class chatRoom( uhgraphics ):
     def __init__( self, size ):
         self._size = size
 
@@ -55,15 +55,6 @@ class chatRoom():
         if self._currentLine == self._maxLines:
             self._currentLine = 0
             print "TBD -> scroll now"
-                
-    @property
-    def dirty( self ):
-        return self._dirty
-
-    def update( self, screen, offset ):
-        screen.blit(self.screen, offset)
-        self._dirty = False
-        
 
 
     

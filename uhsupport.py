@@ -17,23 +17,56 @@ unitList = { 'maiden': unitinfo( "images/maiden.png", 'm' ),
 def debugprint( str ):
     print str
 
-class tile():
-    def __init__( self, filename ):
-        self._image = pygame.image.load( filename )
+
+class uhgraphics:
+    _dirty = True
+    _screen = None
     
     @property
-    def image( self ):
-        return self._image
+    def dirty( self ):
+        return self._dirty
+        
+    def update( self, screen, offset ):
+        screen.blit(self.screen, offset)
+        self._dirty = False
 
-class unit():
-    def __init__( self, info ):
-        self._image =  pygame.image.load( info.filename )
+    @property
+    def screen( self):
+        return self._screen
+
+
+class tile( uhgraphics ):
+    def __init__( self, filename ):
+        self._screen = pygame.image.load( filename )
+    
+
+class unit( uhgraphics ):
+    def __init__( self, info, gamefieldInfo ):
+        self._screen =  pygame.image.load( info.filename )
         self._pos = point( 0,0 )
+        self._gamefieldInfo = gamefieldInfo
+        self._dirty = True
         
     @property
     def pos( self ):
         return pos
+
+    def moveLeft( self ):
+        if pos.x > 0:
+            pos.x -= 1
+            self._dirty = True
     
-    @property
-    def image( self ):
-        return self._image
+    def moveRight( self ):
+        if pos.x < self._gamefieldInfo.size.x:
+            pos.x += 1
+            self._dirty = True
+    
+    def moveUp( self ):
+        if pos.y > 0:
+            pos.y -= 1
+            self._dirty = True
+
+    def moveDown( self ):
+        if pos.y < self._gamefieldInfo.size.y:
+            pos.y -= 1
+            self._dirty = True

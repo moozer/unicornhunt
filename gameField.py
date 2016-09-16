@@ -3,7 +3,7 @@ from pygame.locals import *
 
 from uhsupport import *
 
-class gameField():
+class gameField( uhgraphics ):
     def __init__( self, tilesGeo, tileList = tileList, debugprint = debugprint ):
         self._print = debugprint
 
@@ -29,24 +29,12 @@ class gameField():
         self._print("Populating game field")
         for x in range( 0, self._tilesGeo.x ):
             for y in range( 0, self._tilesGeo.y ):
-                self._screen.blit( self._tiles[0].image, (x*self._tileSize.x, y*self._tileSize.y) )
+                self._tiles[0].update( self._screen, (x*self._tileSize.x, y*self._tileSize.y) )
     
     def _initGraphics( self ):
         self._screen = pygame.Surface(self._size)
         self._screen = self._screen.convert()
         self._addTiles()
-        
-    @property
-    def screen( self):
-        return self._screen
-        
-    @property
-    def dirty( self ):
-        return self._dirty
-        
-    def update( self, screen, offset ):
-        screen.blit(self.screen, offset)
-        self._dirty = False
 
     
 if __name__ == "__main__":
