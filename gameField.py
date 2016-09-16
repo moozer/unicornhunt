@@ -1,22 +1,7 @@
 import pygame
 from pygame.locals import *
-from collections import namedtuple
 
-point = namedtuple( 'point', ['x', 'y'] )
-tileinfo = namedtuple( 'tileInfo', ['filename', 'symbol'] )
-
-tileList = { 'grass': tileinfo( "images/grass.png", "s" ) }
-
-def debugprint( str ):
-    print str
-
-class tile():
-    def __init__( self, filename ):
-        self._image = pygame.image.load( filename )
-    
-    @property
-    def image( self ):
-        return self._image
+from uhsupport import *
 
 class gameField():
     def __init__( self, tilesGeo, tileList = tileList, debugprint = debugprint ):

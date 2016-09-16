@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import *
 
+from uhsupport import *
 from gameField import gameField, point
 from chatRoom import chatRoom
 

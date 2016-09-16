@@ -1,10 +1,7 @@
 import pygame
 from pygame.locals import *
-from collections import namedtuple
 
-from gameField import point
-
-#point = namedtuple( 'point', ['x', 'y'] )
+from uhsupport import *
 
 class chatRoom():
     def __init__( self, size ):
