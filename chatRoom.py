@@ -38,6 +38,16 @@ class chatRoom():
         textpos.topleft = ( 0, self._currentLine*(self._fontSize+1) )
         self._crScreen.blit(text, textpos)
 
+    def addComment( self, unit, action ):
+        self._incrementCurrentLine()
+
+        print "Chatroom action: %s %s"%( unit, action )
+
+        text = self._font.render( "%s %s"%( unit, action ), 1, self._fontColor )
+        textpos = text.get_rect()
+        textpos.topleft = ( 0, self._currentLine*(self._fontSize+1) )
+        self._crScreen.blit(text, textpos)
+
     def _incrementCurrentLine( self ):
         self._currentLine += 1
         if self._currentLine == self._maxLines:
@@ -61,7 +71,7 @@ if __name__ == "__main__":
     # --- chat room part -------
     cr = chatRoom( crSize )
     cr.addMessage( "maiden", "Come to me" )
-    #    cr.addComment( "Unicorn", "eats grass" )
+    cr.addComment( "Unicorn", "eats grass" )
     cr.addMessage( "Badguy", "Hahahaha!" )
     # --- chat room part -------
 
