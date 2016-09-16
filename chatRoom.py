@@ -2,7 +2,9 @@ import pygame
 from pygame.locals import *
 from collections import namedtuple
 
-point = namedtuple( 'point', ['x', 'y'] )
+from gameField import point
+
+#point = namedtuple( 'point', ['x', 'y'] )
 
 class chatRoom():
     def __init__( self, size ):
@@ -19,7 +21,7 @@ class chatRoom():
         self._initGraphics()
 
     def _initGraphics( self ):
-        self._crScreen = pygame.Surface(screen.get_size())
+        self._crScreen = pygame.Surface( self._size)
         self._crScreen = self._crScreen.convert()
         self._crScreen.fill( self._bkColor )
         
