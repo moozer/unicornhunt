@@ -43,6 +43,10 @@ class gameField( uhgraphics ):
     def tilePos( self, tileXY ):
         return point( tileXY.x*self._tileSize.x, tileXY.y*self._tileSize.y )
     
+    def updateTile( self, pos ):
+        self._tiles[0].update( self._screen, (pos.x*self._tileSize.x, pos.y*self._tileSize.y) )
+        self._dirty = True
+    
 if __name__ == "__main__":
     pygame.init()
     FPS = 30 # frames per second setting
