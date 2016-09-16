@@ -11,6 +11,8 @@ class gameField():
         self._tilesGeo = tilesGeo
         self._tileList = tileList
         self._loadTiles()
+        
+        self._dirty = True
 
         self._size = (self._tileSize.x * self._tilesGeo.x,  self._tileSize.y * self._tilesGeo.y ) 
         self._print("Game field size is %s"%(self._size, ) )
@@ -38,6 +40,14 @@ class gameField():
     def screen( self):
         return self._screen
         
+    @property
+    def dirty( self ):
+        return self._dirty
+        
+    def update( self, screen, offset ):
+        screen.blit(self.screen, offset)
+        self._dirty = False
+
     
 if __name__ == "__main__":
     pygame.init()

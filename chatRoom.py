@@ -15,6 +15,8 @@ class chatRoom():
         self._currentLine = -1
         self._maxLines = size.y/self._fontSize
         
+        self._dirty = True
+        
         self._initGraphics()
 
     def _initGraphics( self ):
@@ -35,6 +37,7 @@ class chatRoom():
         textpos = text.get_rect()
         textpos.topleft = ( 0, self._currentLine*(self._fontSize+1) )
         self._crScreen.blit(text, textpos)
+        self._dirty = True
 
     def addComment( self, unit, action ):
         self._incrementCurrentLine()
@@ -45,6 +48,7 @@ class chatRoom():
         textpos = text.get_rect()
         textpos.topleft = ( 0, self._currentLine*(self._fontSize+1) )
         self._crScreen.blit(text, textpos)
+        self._dirty = True
 
     def _incrementCurrentLine( self ):
         self._currentLine += 1
@@ -52,6 +56,16 @@ class chatRoom():
             self._currentLine = 0
             print "TBD -> scroll now"
                 
+    @property
+    def dirty( self ):
+        return self._dirty
+
+    def update( self, screen, offset ):
+        screen.blit(self.screen, offset)
+        self._dirty = False
+        
+
+
     
 if __name__ == "__main__":
     pygame.init()
