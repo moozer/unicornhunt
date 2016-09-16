@@ -6,13 +6,13 @@ import pygame
 
 point = namedtuple( 'point', ['x', 'y'] )
 tileinfo = namedtuple( 'tileInfo', ['filename', 'symbol'] )
-unitinfo = namedtuple( 'unitInfo', ['filename', 'symbol'] )
+unitinfo = namedtuple( 'unitInfo', ['filename', 'symbol', 'name'] )
 
 
 tileList = { 'grass': tileinfo( "images/grass.png", "s" ) }
-unitList = { 'maiden': unitinfo( "images/maiden.png", 'm' ), 
-             'badguy': unitinfo( "images/badguy.png", 'b' ),
-             'unicorn': unitinfo( "images/unicorn.png", 'u' ) }
+unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden' ), 
+             'badguy': unitinfo( "images/badguy.png", 'b', 'badguy' ),
+             'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn' ) }
 
 def debugprint( str ):
     print str
@@ -46,6 +46,7 @@ class unit( uhgraphics ):
         self._pos = initialPos
         self._dirty = True
         self._gamefield = gamefield
+        self.name = info.name
         
     @property
     def pos( self ):
