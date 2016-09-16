@@ -53,22 +53,22 @@ class unit( uhgraphics ):
 
     def moveLeft( self ):
         if self._pos.x > 0:
-            self._pos.x -= 1
+            self._pos = point( self._pos.x - 1, self._pos.y )
             self._dirty = True
     
     def moveRight( self ):
-        if self._pos.x < self._gamefield.tilesGeo.x:
-            self._pos.x += 1
+        if self._pos.x < self._gamefield.tilesGeo.x-1:
+            self._pos = point( self._pos.x +1 , self._pos.y )
             self._dirty = True
     
     def moveUp( self ):
         if self._pos.y > 0:
-            self._pos.y -= 1
+            self._pos = point( self._pos.x, self._pos.y -1 )
             self._dirty = True
 
     def moveDown( self ):
-        if self._pos.y < self._gamefield.tilesGeo.y:
-            self._pos.y -= 1
+        if self._pos.y < self._gamefield.tilesGeo.y-1:
+            self._pos = point( self._pos.x, self._pos.y + 1 )
             self._dirty = True
 
     def update( self, screen, gfOffset ):

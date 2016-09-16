@@ -56,6 +56,16 @@ if __name__ == "__main__":
             if event.type == QUIT:
                 quitLoop = True
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    unicorn.moveLeft()
+                if event.key == pygame.K_RIGHT:
+                    unicorn.moveRight()
+                if event.key == pygame.K_DOWN:
+                    unicorn.moveDown()
+                if event.key == pygame.K_UP:
+                    unicorn.moveUp()
+
         if gf.dirty:
             gf.update( screen, gfOffset)
             
