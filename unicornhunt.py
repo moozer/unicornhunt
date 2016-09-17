@@ -54,6 +54,8 @@ if __name__ == "__main__":
     pygame.display.flip()
 
     # Event loop
+    unitToMove = badguy
+
     quitLoop = False
     while not quitLoop:
         refresh = False
@@ -62,14 +64,29 @@ if __name__ == "__main__":
                 quitLoop = True
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_u:
+                    dprint( "Now moving unicorn" )
+                    unitToMove = unicorn
+                if event.key == pygame.K_b:
+                    dprint( "Now moving badguy" )
+                    unitToMove = badguy
+                if event.key == pygame.K_m:
+                    dprint( "Now moving maiden" )
+                    unitToMove = maiden
+
                 if event.key == pygame.K_LEFT:
-                    badguy.moveLeft()
+                    unitToMove.moveLeft()
                 if event.key == pygame.K_RIGHT:
-                    badguy.moveRight()
+                    unitToMove.moveRight()
                 if event.key == pygame.K_DOWN:
-                    badguy.moveDown()
+                    unitToMove.moveDown()
                 if event.key == pygame.K_UP:
-                    badguy.moveUp()
+                    unitToMove.moveUp()
+        
+        moveUnit( unicorn, [badguy, maiden] )
+        #moveUnit( maiden, [unicorn, maiden, badguy] )
+        #moveUnit( unicorn, [unicorn, maiden, badguy] )
+        
 
         if gf.dirty:
             print "gf update"
