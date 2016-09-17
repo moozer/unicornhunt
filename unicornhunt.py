@@ -92,6 +92,7 @@ class game():
         nextState = gameStates.rungame
 
         for event in pygame.event.get():
+            print event
             if event.type == QUIT:
                 print "Quitting..."
                 quitLoop = True
@@ -116,15 +117,15 @@ class game():
                 if event.key == pygame.K_UP:
                     self.unitToMove.doAction( "moveUp", self.units)
         
-                if event.type == E_EVILWINS:
-                    #dprint( "and evil slayed the unicorn ...")
-                    #p = popup( (300, 300), "and evil slayed the unicorn ..." )
-                    nextState = gameStates.evilwins
+            if event.type == E_EVILWINS:
+                #dprint( "and evil slayed the unicorn ...")
+                #p = popup( (300, 300), "and evil slayed the unicorn ..." )
+                nextState = gameStates.evilwins
 
-                if event.type == E_MAIDENWINS:
-                    #dprint( "and the maiden rode into the sunset ...")
-                    #p = popup( (300, 300), "and the maiden rode into the sunset ..." )
-                    nextState = gameStates.maidenwins
+            if event.type == E_MAIDENWINS:
+                #dprint( "and the maiden rode into the sunset ...")
+                #p = popup( (300, 300), "and the maiden rode into the sunset ..." )
+                nextState = gameStates.maidenwins
 
         
         for unit in self.units:
@@ -152,10 +153,10 @@ class game():
         return quitLoop, refresh, nextState
 
 
-    def runMaidenWinsGame( self ):
+    def runMaidenWins( self ):
         quitLoop = False
         refresh = False
-        nextState = gameStates.quit
+        nextState = gameStates.maidenwins
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -166,12 +167,34 @@ class game():
                     quitLoop = True
 
         if self.popupMaidenWins.dirty:
-            #print "cr update"
-            self.cr.update( self.screen, self.crOffset)
+            self.popupMaidenWins.update( self.screen, self.gfOffset)
             refresh = True
                             
         if refresh:
-            #print "refreshing"
+            pygame.display.flip()
+            refresh = False
+
+        return quitLoop, refresh, nextState
+
+
+    def runEvilWins( self ):
+        quitLoop = False
+        refresh = False
+        nextState = gameStates.maidenwins
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                quitLoop = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    quitLoop = True
+
+        if self.popupEvilWins.dirty:
+            self.popupEvilWins.update( self.screen, self.gfOffset)
+            refresh = True
+                            
+        if refresh:
             pygame.display.flip()
             refresh = False
 
