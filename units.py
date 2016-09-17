@@ -22,6 +22,7 @@ class unit( uhgraphics ):
         self._actions["moveDown"]  = move( self.info.speed, directions.down )    
         
         self._actions["idle"]      = action()
+
     def comment( self, string ):
         self._chatroom.addComment( self.name, string )
 
@@ -106,8 +107,10 @@ class unit( uhgraphics ):
             ret = self._actions['moveLeft']( self )
 
         if not ret:
-            print "%s failed to automove..."%(self.name,)
-            self._actions['moveDown']( self )
+            if self.pos.y > self._gamefield.tilesGeo.y/2:
+                self._actions['moveUp']( self )                
+            else:
+                self._actions['moveDown']( self )
 
         ret = True
         if moveDirection[1] > 0.5:
@@ -116,8 +119,10 @@ class unit( uhgraphics ):
             ret = self._actions['moveUp']( self )
         
         if not ret:
-            print "%s failed to automove..."%(self.name,)
-            self._actions['moveDown']( self )
+            if self.pos.x > self._gamefield.tilesGeo.x/2:
+                self._actions['moveLeft']( self )                
+            else:
+                self._actions['moveRight']( self )
 
         return False
         
