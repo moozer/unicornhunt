@@ -5,6 +5,7 @@ from pygame.locals import *
 from uhsupport import *
 from gameField import gameField, point
 from chatRoom import chatRoom
+from actions import *
 
 
 
@@ -39,11 +40,12 @@ if __name__ == "__main__":
     # --- game field part -------
 
     # --- units part -------
-    unicorn = unit( unitList['unicorn'], gf, point(0,0) )
+    unicorn = unit( unitList['unicorn'], gf, cr, point(4,4) )
     cr.addMessage( "system", "Unicorn at %s"%( unicorn.pos, ) )
-    badguy = unit( unitList['badguy'], gf, point(10,10) )
+    unicorn.action["idle"] = eatGrass()    
+    badguy = unit( unitList['badguy'], gf, cr, point(10,10) )
     cr.addMessage( "system", "Badguy at %s"%( badguy.pos, ) )
-    maiden = unit( unitList['maiden'], gf, point(20,20) )
+    maiden = unit( unitList['maiden'], gf, cr, point(20,20) )
     cr.addMessage( "system", "maiden at %s"%( maiden.pos, ) )
     # --- units part -------
 
@@ -83,13 +85,16 @@ if __name__ == "__main__":
                 if event.key == pygame.K_UP:
                     unitToMove.moveUp()
         
-        moveUnit( unicorn, [badguy, maiden] )
+        if not moveUnit( unicorn, [badguy, maiden] ):
+            unicorn.doAction( "idle" )
+        else:
+            print "not idling"
         #moveUnit( maiden, [unicorn, maiden, badguy] )
         #moveUnit( unicorn, [unicorn, maiden, badguy] )
         
 
         if gf.dirty:
-            print "gf update"
+            #print "gf update"
             gf.update( screen, gfOffset)
             for unit in [unicorn, maiden, badguy]:
                 print "%s update"%(unit.name, )
@@ -97,12 +102,12 @@ if __name__ == "__main__":
             refresh = True
             
         if cr.dirty:
-            print "cr update"
+            #print "cr update"
             cr.update( screen, crOffset)
             refresh = True
 
         if refresh:
-            print "refreshing"
+            #print "refreshing"
             pygame.display.flip()
             refresh = False
 

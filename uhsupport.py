@@ -4,6 +4,7 @@
 from collections import namedtuple
 import pygame
 import numpy
+import time
 
 point = namedtuple( 'point', ['x', 'y'] )
 tileinfo = namedtuple( 'tileInfo', ['filename', 'symbol'] )
@@ -16,6 +17,7 @@ unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden',
                                   {'maiden': 5.0, 'badguy': -1.0, 'unicorn': 10.0 } ), 
              'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn',
                                   {'maiden': 10.0, 'badguy': -12.5, 'unicorn': 0.0 } ) }
+
 
 def debugprint( str ):
     print str
@@ -44,13 +46,22 @@ class tile( uhgraphics ):
     
 
 class unit( uhgraphics ):
-    def __init__( self, info, gamefield, initialPos = point(0,0) ):
+    def __init__( self, info, gamefield, chatroom, initialPos = point(0,0) ):
         self._screen =  pygame.image.load( info.filename )
         self._pos = initialPos
         self._dirty = True
         self._gamefield = gamefield
         self.name = info.name
         self.info = info
+        self._actions = {}
+        self.nextActionTime = time.time() * 1000 # in ms
+        self._chatroom = chatroom
+
+    def comment( self, string ):
+        self._chatroom.addComment( self.name, string )
+
+    def talk( self, string ):
+        self._chatroom.addMessage( self.name, string )
         
     @property
     def pos( self ):
@@ -86,6 +97,14 @@ class unit( uhgraphics ):
         screen.blit(self.screen, unitOffset)
         self._dirty = False
 
+    @property
+    def action( self ):
+        return self._actions
+
+    def doAction( self, actionName ):
+        print "%s doing %s"%( self.name, actionName )
+        self._actions[actionName]( self )
+
 def moveUnit( unit, unitList ):
     moveDirection = [0.0, 0.0]
 
@@ -103,12 +122,17 @@ def moveUnit( unit, unitList ):
         
     if moveDirection[0] > 0.5:
         unit.moveRight()
+        return True
     elif moveDirection[0] < -0.5:
         unit.moveLeft()
+        return True
 
     if moveDirection[1] > 0.5:
         unit.moveDown()
+        return True
     elif moveDirection[1] < -0.5:
         unit.moveUp()
+        return True
     
-        
+    return False
+    
