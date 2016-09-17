@@ -20,7 +20,8 @@ class unit( uhgraphics ):
         self._actions["moveRight"] = move( self.info.speed, directions.right )    
         self._actions["moveUp"]    = move( self.info.speed, directions.up )    
         self._actions["moveDown"]  = move( self.info.speed, directions.down )    
-
+        
+        self._actions["idle"]      = action()
     def comment( self, string ):
         self._chatroom.addComment( self.name, string )
 
