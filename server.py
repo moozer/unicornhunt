@@ -3,14 +3,20 @@ import threading
 import SocketServer
 import time
 
+import pygame
+
+
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 
     def handle(self):
         while True:
             data = self.request.recv(1024)
-            #cur_thread = threading.current_thread()
-            #response = "{}: {}".format(cur_thread.name, data)
-            self.request.send(data)
+
+            if data == "hello":
+                self.request.sendall("welcome")
+                self.request.sendall("now assuming keyboard input from you")
+                
+            procesKeystrokes( data )
             
             if data == "goodbye":
                 self.request.sendall("goodbye")
