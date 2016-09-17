@@ -22,7 +22,7 @@ class directions:
     up, down, left, right = range(4)
 
 class gameStates:
-    startup, rungame, evilwins, maidenwins = range(4)
+    startup, rungame, evilwins, maidenwins, quit = range(5)
 
 def debugprint( str ):
     print str

@@ -7,6 +7,7 @@ from gameField import gameField, point
 from chatRoom import chatRoom
 from actions import *
 from units import *
+from popup import *
 
 class game():
     def __init__( self ):
@@ -52,6 +53,10 @@ class game():
 
         # --- units part -------
 
+        self.popupMaidenWins = popup( (300, 300), "and they rode into the sunset..." )
+        self.popupEvilWins = popup( (300, 300), "Evil conquered beauty\nand darkness fell" )
+        
+
 
         # Blit everything to the screen
 #        screen.blit( self.gf.screen, gfOffset )
@@ -72,11 +77,14 @@ class game():
             
             if self._state == gameStates.rungame:
                 quitLoop, refresh, nextState = self.runGame()
+            elif self._state == gameStates.maidenwins:
+                quitLoop, refresh, nextState = self.runMaidenWins()
+            elif self._state == gameStates.quit:
+                quitLoop = True
             else:
                 print "current state is", state
 
             self._state = nextState
-
 
     def runGame( self ):
         quitLoop = False
@@ -109,13 +117,13 @@ class game():
                     unitToMove.doAction( "moveUp")
         
                 if event.type == E_EVILWINS:
-                    dprint( "and evil slayed the unicorn ...")
-                    p = popup( (300, 300), "and evil slayed the unicorn ..." )
+                    #dprint( "and evil slayed the unicorn ...")
+                    #p = popup( (300, 300), "and evil slayed the unicorn ..." )
                     nextState = gameStates.evilwins
 
                 if event.type == E_MAIDENWINS:
-                    dprint( "and the maiden rode into the sunset ...")
-                    p = popup( (300, 300), "and the maiden rode into the sunset ..." )
+                    #dprint( "and the maiden rode into the sunset ...")
+                    #p = popup( (300, 300), "and the maiden rode into the sunset ..." )
                     nextState = gameStates.maidenwins
 
         
@@ -143,6 +151,31 @@ class game():
 
         return quitLoop, refresh, nextState
 
+
+    def runMaidenWinsGame( self ):
+        quitLoop = False
+        refresh = False
+        nextState = gameStates.quit
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                quitLoop = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    quitLoop = True
+
+        if self.popupMaidenWins.dirty:
+            #print "cr update"
+            self.cr.update( self.screen, self.crOffset)
+            refresh = True
+                            
+        if refresh:
+            #print "refreshing"
+            pygame.display.flip()
+            refresh = False
+
+        return quitLoop, refresh, nextState
 
 if __name__ == "__main__":
     g = game()
