@@ -99,22 +99,22 @@ class game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_u:
                     dprint( "Now moving unicorn" )
-                    unitToMove = unicorn
+                    self.unitToMove = unicorn
                 if event.key == pygame.K_b:
                     dprint( "Now moving badguy" )
-                    unitToMove = badguy
+                    self.unitToMove = badguy
                 if event.key == pygame.K_m:
                     dprint( "Now moving maiden" )
-                    unitToMove = maiden
+                    self.unitToMove = maiden
 
                 if event.key == pygame.K_LEFT:
-                    unitToMove.doAction( "moveLeft" )
+                    self.unitToMove.doAction( "moveLeft", self.units )
                 if event.key == pygame.K_RIGHT:
-                    unitToMove.doAction( "moveRight" )
+                    self.unitToMove.doAction( "moveRight", self.units )
                 if event.key == pygame.K_DOWN:
-                    unitToMove.doAction( "moveDown" )
+                    self.unitToMove.doAction( "moveDown", self.units )
                 if event.key == pygame.K_UP:
-                    unitToMove.doAction( "moveUp")
+                    self.unitToMove.doAction( "moveUp", self.units)
         
                 if event.type == E_EVILWINS:
                     #dprint( "and evil slayed the unicorn ...")
@@ -129,7 +129,7 @@ class game():
         
         for unit in self.units:
             if not unit.autoMove( self.units ):
-                unit.doAction( "idle" )
+                unit.doAction( "idle", self.units )
 
         if self.gf.dirty:
             #print "gf update"
