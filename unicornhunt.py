@@ -28,9 +28,6 @@ class game():
 
         # --- chat room part -------
         self.cr = chatRoom( crSize )
-    #    cr.addMessage( "maiden", "Come to me" )
-    #    cr.addComment( "Unicorn", "eats grass" )
-    #    cr.addMessage( "Badguy", "Hahahaha!" )
         # --- chat room part -------
 
         def dprint( str ):
@@ -59,8 +56,6 @@ class game():
 
 
         # Blit everything to the screen
-#        screen.blit( self.gf.screen, gfOffset )
-#        screen.blit( self.cr.screen, crOffset)
         self.cr.update( self.screen, self.crOffset)
         self.gf.update( self.screen, self.crOffset)
 
@@ -118,13 +113,9 @@ class game():
                     self.unitToMove.doAction( "moveUp", self.units)
         
             if event.type == E_EVILWINS:
-                #dprint( "and evil slayed the unicorn ...")
-                #p = popup( (300, 300), "and evil slayed the unicorn ..." )
                 nextState = gameStates.evilwins
 
             if event.type == E_MAIDENWINS:
-                #dprint( "and the maiden rode into the sunset ...")
-                #p = popup( (300, 300), "and the maiden rode into the sunset ..." )
                 nextState = gameStates.maidenwins
 
         
@@ -133,10 +124,8 @@ class game():
                 unit.doAction( "idle", self.units )
 
         if self.gf.dirty:
-            #print "gf update"
             self.gf.update( self.screen, self.gfOffset)
             for unit in self.units:
-                #print "%s update"%(unit.name, )
                 unit.update( self.screen, self.gfOffset)
             refresh = True
             
