@@ -2,12 +2,15 @@
 import pygame
 from pygame.locals import *
 
+import threading
+
 from uhsupport import *
 from gameField import gameField, point
 from chatRoom import chatRoom
 from actions import *
 from units import *
 from popup import *
+from thrserver import *
 
 class game():
     def __init__( self ):
@@ -57,8 +60,16 @@ class game():
         self.cr.update( self.screen, self.crOffset)
         self.gf.update( self.screen, self.crOffset)
 
-        pygame.display.flip()
 
+        # remote access
+        kr = keyReceiver( '127.0.0.1', 10000, "userA" )
+        kr_t = threading.Thread(name="userA_remote", target=kr.listen)
+        print "Spawning thread"
+        kr_t.setDaemon( True )
+        kr_t.start()
+        self.cr.addMessage( "system", "starting remote thread" )
+
+        pygame.display.flip()
         # Event loop
 
         quitLoop = False
@@ -66,6 +77,8 @@ class game():
         self.unitToMove = self.badguy
         self.unitToMove.controlled = True
 
+        self.remoteA_enable = True
+        
         while not quitLoop:
             refresh = False
             
@@ -93,6 +106,9 @@ class game():
                 print "Quitting..."
                 quitLoop = True
 
+            if self.remoteA_enable:
+                self.handleRemoteEvents( "userA", self.badguy, event )
+                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_u:
                     self.cr.addComment( "system", "Now moving unicorn" )
@@ -198,6 +214,18 @@ class game():
             refresh = False
 
         return quitLoop, refresh, nextState
+
+    def handleRemoteEvents( self, user, unit, event ):
+        if event.type == remoteEvent[user]['up']:
+            unit.doAction( "moveUp", self.units )
+        elif event.type == remoteEvent[user]['down']:
+            unit.doAction( "moveDown", self.units )
+        elif event.type == remoteEvent[user]['left']:
+            unit.doAction( "moveLeft", self.units )
+        elif event.type == remoteEvent[user]['right']:
+            unit.doAction( "moveRight", self.units )
+
+
 
 if __name__ == "__main__":
     g = game()

@@ -28,7 +28,14 @@ def debugprint( str ):
     print str
 
 E_EVILWINS = pygame.USEREVENT  + 1
-E_MAIDENWINS = pygame.USEREVENT  + 2
+E_MAIDENWINS = pygame.USEREVENT + 2
+E_REMOTE_A_UP    = pygame.USEREVENT + 3
+E_REMOTE_A_DOWN  = pygame.USEREVENT + 4
+E_REMOTE_A_LEFT  = pygame.USEREVENT + 5
+E_REMOTE_A_RIGHT = pygame.USEREVENT + 6
+
+remoteEvent = { "userA": {'up': E_REMOTE_A_UP, 'down': E_REMOTE_A_DOWN , 
+                          'right': E_REMOTE_A_RIGHT, 'left': E_REMOTE_A_LEFT } }
 
 gameOverMatrix = { 'maiden':  { 'unicorn': E_MAIDENWINS },
                    'unicorn': { 'maiden': E_MAIDENWINS, 'badguy': E_EVILWINS },

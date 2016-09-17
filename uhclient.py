@@ -34,6 +34,8 @@ def client(ip, port):
     try:
         sock.sendall("hello")
         print sock.recv(1024)
+        print sock.recv(1024)
+        print sock.recv(1024)
         
         print "Now doing movement"
         
@@ -42,7 +44,8 @@ def client(ip, port):
  
         sock.sendall("goodbye")
         print sock.recv(1024)
- 
+            
+    
     finally:
         sock.close()
 
