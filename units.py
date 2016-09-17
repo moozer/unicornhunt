@@ -14,6 +14,8 @@ class unit( uhgraphics ):
         self._chatroom = chatroom
         
         self._addMoveActions()
+        self._addFallActions()
+        self._actions["idle"]      = action()
 
     def _addMoveActions( self ):   
         self._actions["moveLeft"]  = move( self.info.speed, directions.left )    
@@ -21,13 +23,12 @@ class unit( uhgraphics ):
         self._actions["moveUp"]    = move( self.info.speed, directions.up )    
         self._actions["moveDown"]  = move( self.info.speed, directions.down )    
 
+    def _addFallActions( self ):
         self._actions["pushedLeft"]  = fall( directions.left )    
         self._actions["pushedRight"] = fall( directions.right )    
         self._actions["pushedUp"]    = fall( directions.up )    
         self._actions["pushedDown"]  = fall( directions.down )    
         
-        self._actions["idle"]      = action()
-
     def comment( self, string ):
         self._chatroom.addComment( self.name, string )
 
@@ -37,17 +38,17 @@ class unit( uhgraphics ):
     @property
     def pos( self ):
         return self._pos
-
+           
+        
     def moveLeft( self, units ):
         nextPos = point( self._pos.x - 1, self._pos.y )
         
         noObstacle = True
         for unit in units:
             if unit.pos == nextPos:
+                self.handleCollision( unit )
                 noObstacle = unit.doAction('pushedLeft', units )
-                print "pushing?", noObstacle
                 break
-
         
         if not noObstacle:
             return False
@@ -58,7 +59,6 @@ class unit( uhgraphics ):
             self._dirty = True
             return True
             
-        print "ret false"
         return False
         
     def moveRight( self, units ):
@@ -67,8 +67,8 @@ class unit( uhgraphics ):
         noObstacle = True
         for unit in units:
             if unit.pos == nextPos:
+                self.handleCollision( unit )
                 noObstacle = unit.doAction('pushedRight', units )
-                print "pushing?", noObstacle
                 break
         
         if not noObstacle:
@@ -88,6 +88,7 @@ class unit( uhgraphics ):
         noObstacle = True
         for unit in units:
             if unit.pos == nextPos:
+                self.handleCollision( unit )
                 noObstacle = unit.doAction('pushedUp', units )
                 break                
         
@@ -108,9 +109,9 @@ class unit( uhgraphics ):
         noObstacle = True
         for unit in units:
             if unit.pos == nextPos:
+                self.handleCollision( unit )
                 noObstacle = unit.doAction('pushedDown', units )
-                break                
-
+                break
         
         if not noObstacle:
             return False
@@ -179,4 +180,8 @@ class unit( uhgraphics ):
                 self._actions['moveRight']( self, otherUnits )
 
         return False
+        
+    def handleCollision( self, unit ):
+        if unit.name in gameOverMatrix[ self.name ]:
+            pygame.event.post( pygame.event.Event( gameOverMatrix[self.name][unit.name] ) )
         

@@ -30,6 +30,10 @@ def debugprint( str ):
 E_EVILWINS = pygame.USEREVENT  + 1
 E_MAIDENWINS = pygame.USEREVENT  + 2
 
+gameOverMatrix = { 'maiden':  { 'unicorn': E_MAIDENWINS },
+                   'unicorn': { 'maiden': E_MAIDENWINS, 'badguy': E_EVILWINS },
+                   'badguy':  { 'unicorn': E_EVILWINS } }
+                   
 class uhgraphics:
     _dirty = True
     _screen = None
