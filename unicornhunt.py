@@ -63,13 +63,13 @@ if __name__ == "__main__":
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    unicorn.moveLeft()
+                    badguy.moveLeft()
                 if event.key == pygame.K_RIGHT:
-                    unicorn.moveRight()
+                    badguy.moveRight()
                 if event.key == pygame.K_DOWN:
-                    unicorn.moveDown()
+                    badguy.moveDown()
                 if event.key == pygame.K_UP:
-                    unicorn.moveUp()
+                    badguy.moveUp()
 
         if gf.dirty:
             print "gf update"
