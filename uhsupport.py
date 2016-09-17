@@ -21,9 +21,14 @@ unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden', 350,
 class directions:
     up, down, left, right = range(4)
 
+class gameStates:
+    startup, rungame, evilwins, maidenwins = range(4)
+
 def debugprint( str ):
     print str
 
+E_EVILWINS = pygame.USEREVENT  + 1
+E_MAIDENWINS = pygame.USEREVENT  + 2
 
 class uhgraphics:
     _dirty = True
