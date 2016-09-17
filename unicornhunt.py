@@ -62,12 +62,13 @@ class game():
 
 
         # remote access
-        kr = keyReceiver( '127.0.0.1', 10000, "userA" )
-        kr_t = threading.Thread(name="userA_remote", target=kr.listen)
-        print "Spawning thread"
-        kr_t.setDaemon( True )
-        kr_t.start()
-        self.cr.addMessage( "system", "starting remote thread" )
+        kr = {}
+        for user in ["userA", "userB"]:
+            kr[user] = keyReceiver( '127.0.0.1', remoteEvent[user]['port'], user )
+            kr_t = threading.Thread(name="%s_remote"%(user, ), target=kr[user].listen)
+            kr_t.setDaemon( True )
+            kr_t.start()
+            self.cr.addMessage( "system", "%s on port %d"%(user, remoteEvent[user]['port']) )
 
         pygame.display.flip()
         # Event loop
@@ -78,6 +79,7 @@ class game():
         self.unitToMove.controlled = True
 
         self.remoteA_enable = True
+        self.remoteB_enable = True
         
         while not quitLoop:
             refresh = False

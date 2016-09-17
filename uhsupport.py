@@ -33,9 +33,17 @@ E_REMOTE_A_UP    = pygame.USEREVENT + 3
 E_REMOTE_A_DOWN  = pygame.USEREVENT + 4
 E_REMOTE_A_LEFT  = pygame.USEREVENT + 5
 E_REMOTE_A_RIGHT = pygame.USEREVENT + 6
+E_REMOTE_B_UP    = pygame.USEREVENT + 7
+E_REMOTE_B_DOWN  = pygame.USEREVENT + 8
+E_REMOTE_B_LEFT  = pygame.USEREVENT + 9
+E_REMOTE_B_RIGHT = pygame.USEREVENT + 10
 
 remoteEvent = { "userA": {'up': E_REMOTE_A_UP, 'down': E_REMOTE_A_DOWN , 
-                          'right': E_REMOTE_A_RIGHT, 'left': E_REMOTE_A_LEFT } }
+                          'right': E_REMOTE_A_RIGHT, 'left': E_REMOTE_A_LEFT,
+                          'port': 10000 },
+                "userB": {'up': E_REMOTE_B_UP, 'down': E_REMOTE_B_DOWN , 
+                          'right': E_REMOTE_B_RIGHT, 'left': E_REMOTE_B_LEFT,
+                          'port': 10001} }
 
 gameOverMatrix = { 'maiden':  { 'unicorn': E_MAIDENWINS },
                    'unicorn': { 'maiden': E_MAIDENWINS, 'badguy': E_EVILWINS },
