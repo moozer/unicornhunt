@@ -20,6 +20,11 @@ class unit( uhgraphics ):
         self._actions["moveRight"] = move( self.info.speed, directions.right )    
         self._actions["moveUp"]    = move( self.info.speed, directions.up )    
         self._actions["moveDown"]  = move( self.info.speed, directions.down )    
+
+        self._actions["pushedLeft"]  = fall( directions.left )    
+        self._actions["pushedRight"] = fall( directions.right )    
+        self._actions["pushedUp"]    = fall( directions.up )    
+        self._actions["pushedDown"]  = fall( directions.down )    
         
         self._actions["idle"]      = action()
 
@@ -33,37 +38,86 @@ class unit( uhgraphics ):
     def pos( self ):
         return self._pos
 
-    def moveLeft( self ):
+    def moveLeft( self, units ):
+        nextPos = point( self._pos.x - 1, self._pos.y )
+        
+        noObstacle = True
+        for unit in units:
+            if unit.pos == nextPos:
+                noObstacle = unit.doAction('pushedLeft', units )
+                print "pushing?", noObstacle
+                break
+
+        
+        if not noObstacle:
+            return False
+        
         if self._pos.x > 0:
             self._gamefield.updateTile( self._pos )
-            self._pos = point( self._pos.x - 1, self._pos.y )
+            self._pos = nextPos
             self._dirty = True
             return True
             
+        print "ret false"
         return False
         
-    def moveRight( self ):
+    def moveRight( self, units ):
+        nextPos = point( self._pos.x + 1, self._pos.y )
+
+        noObstacle = True
+        for unit in units:
+            if unit.pos == nextPos:
+                noObstacle = unit.doAction('pushedRight', units )
+                print "pushing?", noObstacle
+                break
+        
+        if not noObstacle:
+            return False
+                
         if self._pos.x < self._gamefield.tilesGeo.x-1:
             self._gamefield.updateTile( self._pos )
-            self._pos = point( self._pos.x +1 , self._pos.y )
+            self._pos = nextPos
             self._dirty = True
             return True
             
         return False
     
-    def moveUp( self ):
+    def moveUp( self, units  ):
+        nextPos = point( self._pos.x, self._pos.y-1 )
+
+        noObstacle = True
+        for unit in units:
+            if unit.pos == nextPos:
+                noObstacle = unit.doAction('pushedUp', units )
+                break                
+        
+        if not noObstacle:
+            return False
+
         if self._pos.y > 0:
             self._gamefield.updateTile( self._pos )
-            self._pos = point( self._pos.x, self._pos.y -1 )
+            self._pos = nextPos
             self._dirty = True
             return True
             
         return False
 
-    def moveDown( self ):
+    def moveDown( self, units  ):
+        nextPos = point( self._pos.x, self._pos.y+1 )
+
+        noObstacle = True
+        for unit in units:
+            if unit.pos == nextPos:
+                noObstacle = unit.doAction('pushedDown', units )
+                break                
+
+        
+        if not noObstacle:
+            return False
+
         if self._pos.y < self._gamefield.tilesGeo.y-1:
             self._gamefield.updateTile( self._pos )
-            self._pos = point( self._pos.x, self._pos.y + 1 )
+            self._pos = nextPos
             self._dirty = True
             return True
             
@@ -79,9 +133,9 @@ class unit( uhgraphics ):
     def action( self ):
         return self._actions
 
-    def doAction( self, actionName ):
+    def doAction( self, actionName, units ):
         #print "%s doing %s"%( self.name, actionName )
-        self._actions[actionName]( self )
+        return self._actions[actionName]( self, units )
 
     def autoMove( self, otherUnits ):
 #        if self.nextActionTime > time.time()*1000:
@@ -102,27 +156,27 @@ class unit( uhgraphics ):
         
         ret = True
         if moveDirection[0] > 0.5:
-            ret = self._actions['moveRight']( self )
+            ret = self._actions['moveRight']( self, otherUnits )
         elif moveDirection[0] < -0.5:
-            ret = self._actions['moveLeft']( self )
+            ret = self._actions['moveLeft']( self, otherUnits )
 
         if not ret:
             if self.pos.y > self._gamefield.tilesGeo.y/2:
-                self._actions['moveUp']( self )                
+                self._actions['moveUp']( self, otherUnits )                
             else:
-                self._actions['moveDown']( self )
+                self._actions['moveDown']( self, otherUnits )
 
         ret = True
         if moveDirection[1] > 0.5:
-            ret = self._actions['moveDown']( self )
+            ret = self._actions['moveDown']( self, otherUnits )
         elif moveDirection[1] < -0.5:
-            ret = self._actions['moveUp']( self )
+            ret = self._actions['moveUp']( self, otherUnits )
         
         if not ret:
             if self.pos.x > self._gamefield.tilesGeo.x/2:
-                self._actions['moveLeft']( self )                
+                self._actions['moveLeft']( self, otherUnits )                
             else:
-                self._actions['moveRight']( self )
+                self._actions['moveRight']( self, otherUnits )
 
         return False
         

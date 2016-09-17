@@ -7,7 +7,7 @@ class action():
     _comment = None
     _message = None
 
-    def __call__( self, unit ):
+    def __call__( self, unit, units ):
         if unit.nextActionTime > time.time() * 1000:
             return False
 
@@ -16,10 +16,13 @@ class action():
         if self._message:
             unit.message( self._message )
 
-        if self._doAction( unit ):
+        if self._doAction( unit, units ):
             unit.nextActionTime = time.time()*1000 + self._time
+            return True
+        
+        return False
 
-    def _doAction( self, unit ):
+    def _doAction( self, unit, units ):
         return True
         
 class eatGrass( action ):
@@ -27,20 +30,20 @@ class eatGrass( action ):
         self._time = 500
         self._comment = "eats grass"
         
-    def _doAction( self, unit ):
+    def _doAction( self, unit, units ):
         moves = [(-1, 0), (0,0), (1, 0), (0, -1), (0,0), (0, 1)]
         move = moves[random.randint(0, 5)]
     
         print "%s eats grass and moves %s"%( unit.name, move )
     
         if move[0] == -1:
-            unit.moveLeft()
+            unit.moveLeft( units )
         elif move[0] == 1:
-            unit.moveRight()
+            unit.moveRight( units )
         elif move[1] == -1:
-            unit.moveUp()
+            unit.moveUp( units )
         elif move[1] == 1:
-            unit.moveDown()
+            unit.moveDown( units )
     
         return True
 
@@ -49,15 +52,34 @@ class move( action ):
         self._time = time
         self._direction = direction
         
-    def _doAction( self, unit ):
+    def _doAction( self, unit, units ):
         if self._direction == directions.right:
-            ret = unit.moveRight()
+            ret = unit.moveRight( units )
         elif self._direction == directions.left:
-            ret = unit.moveLeft()
+            ret = unit.moveLeft( units )
         elif self._direction == directions.down:
-            ret = unit.moveDown()
+            ret = unit.moveDown( units )
         elif self._direction == directions.up:
-            ret = unit.moveUp()
+            ret = unit.moveUp( units )
 
         return ret
         
+class fall( action ):
+    def __init__( self, direction ):
+        self._time = 1000
+        self._direction = direction
+        self._comment = "falls"
+        
+    def _doAction( self, unit, units ):
+        if self._direction == directions.right:
+            ret = unit.moveRight( units )
+        elif self._direction == directions.left:
+            ret = unit.moveLeft( units )
+        elif self._direction == directions.down:
+            ret = unit.moveDown( units )
+        elif self._direction == directions.up:
+            ret = unit.moveUp( units )
+
+        return ret
+    
+    
