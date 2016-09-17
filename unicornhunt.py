@@ -16,9 +16,9 @@ class game():
     #    fpsClock = pygame.time.Clock()
 
         tilesGeo =  point( 31, 21 )
-        screenSize = point( 1200, 700 )
+        screenSize = point( 1300, 700 )
         self.gfOffset = point( 0,0 )
-        crSize = point( 200, 700 )
+        crSize = point( 300, 700 )
         self.crOffset = point( 1000, 0 )
 
         # Initialise screen
