@@ -65,6 +65,19 @@ class move( action ):
         return ret
         
 class fall( action ):
+    def __call__( self, unit, units ):
+        # ignore next time timing issues
+        if self._comment:
+            unit.comment( self._comment )
+        if self._message:
+            unit.message( self._message )
+
+        if self._doAction( unit, units ):
+            unit.nextActionTime = time.time()*1000 + self._time
+            return True
+        
+        return False
+
     def __init__( self, direction ):
         self._time = 1000
         self._direction = direction
