@@ -16,12 +16,11 @@ class action():
         if self._message:
             unit.message( self._message )
 
-        self._doAction( unit )
-        
-        unit.nextActionTime = time.time()*1000 + self._time
+        if self._doAction( unit ):
+            unit.nextActionTime = time.time()*1000 + self._time
 
     def _doAction( self, unit ):
-        return
+        return True
         
 class eatGrass( action ):
     def __init__( self ):
@@ -42,6 +41,8 @@ class eatGrass( action ):
             unit.moveUp()
         elif move[1] == 1:
             unit.moveDown()
+    
+        return True
 
 class move( action ):
     def __init__( self, time, direction ):
@@ -50,11 +51,13 @@ class move( action ):
         
     def _doAction( self, unit ):
         if self._direction == directions.right:
-            unit.moveRight()
+            ret = unit.moveRight()
         elif self._direction == directions.left:
-            unit.moveLeft()
+            ret = unit.moveLeft()
         elif self._direction == directions.down:
-            unit.moveDown()
+            ret = unit.moveDown()
         elif self._direction == directions.up:
-            unit.moveUp()
+            ret = unit.moveUp()
+
+        return ret
         

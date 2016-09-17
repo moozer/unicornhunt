@@ -21,7 +21,6 @@ class unit( uhgraphics ):
         self._actions["moveUp"]    = move( self.info.speed, directions.up )    
         self._actions["moveDown"]  = move( self.info.speed, directions.down )    
 
-
     def comment( self, string ):
         self._chatroom.addComment( self.name, string )
 
@@ -37,24 +36,36 @@ class unit( uhgraphics ):
             self._gamefield.updateTile( self._pos )
             self._pos = point( self._pos.x - 1, self._pos.y )
             self._dirty = True
-    
+            return True
+            
+        return False
+        
     def moveRight( self ):
         if self._pos.x < self._gamefield.tilesGeo.x-1:
             self._gamefield.updateTile( self._pos )
             self._pos = point( self._pos.x +1 , self._pos.y )
             self._dirty = True
+            return True
+            
+        return False
     
     def moveUp( self ):
         if self._pos.y > 0:
             self._gamefield.updateTile( self._pos )
             self._pos = point( self._pos.x, self._pos.y -1 )
             self._dirty = True
+            return True
+            
+        return False
 
     def moveDown( self ):
         if self._pos.y < self._gamefield.tilesGeo.y-1:
             self._gamefield.updateTile( self._pos )
             self._pos = point( self._pos.x, self._pos.y + 1 )
             self._dirty = True
+            return True
+            
+        return False
 
     def update( self, screen, gfOffset ):
         tilePos = self._gamefield.tilePos( self._pos )
@@ -67,37 +78,45 @@ class unit( uhgraphics ):
         return self._actions
 
     def doAction( self, actionName ):
-        print "%s doing %s"%( self.name, actionName )
+        #print "%s doing %s"%( self.name, actionName )
         self._actions[actionName]( self )
 
-def moveUnit( unit, unitList ):
-    moveDirection = [0.0, 0.0]
+    def autoMove( self, otherUnits ):
+#        if self.nextActionTime > time.time()*1000:
+#            return False
 
-    for otherUnit in unitList:
-        if unit == otherUnit:
-            continue
+        moveDirection = [0.0, 0.0]
+        for otherUnit in otherUnits:
+            if self == otherUnit:
+                continue
 
-        vect = [otherUnit.pos.x - unit.pos.x, otherUnit.pos.y - unit.pos.y]
-        dist = numpy.linalg.norm( vect )
+            vect = [otherUnit.pos.x - self.pos.x, otherUnit.pos.y - self.pos.y]
+            dist = numpy.linalg.norm( vect )
 
-        force = unit.info.attract[otherUnit.name]/dist/dist
+            force = self.info.attract[otherUnit.name]/dist/dist
+            
+            moveInc = vect * 1/dist*force
+            moveDirection = moveDirection + moveInc
         
-        moveInc = vect * 1/dist*force
-        moveDirection = moveDirection + moveInc
-        
-    if moveDirection[0] > 0.5:
-        unit.moveRight()
-        return True
-    elif moveDirection[0] < -0.5:
-        unit.moveLeft()
-        return True
+        ret = True
+        if moveDirection[0] > 0.5:
+            ret = self._actions['moveRight']( self )
+        elif moveDirection[0] < -0.5:
+            ret = self._actions['moveLeft']( self )
 
-    if moveDirection[1] > 0.5:
-        unit.moveDown()
-        return True
-    elif moveDirection[1] < -0.5:
-        unit.moveUp()
-        return True
-    
-    return False
-    
+        if not ret:
+            print "%s failed to automove..."%(self.name,)
+            self._actions['moveDown']( self )
+
+        ret = True
+        if moveDirection[1] > 0.5:
+            ret = self._actions['moveDown']( self )
+        elif moveDirection[1] < -0.5:
+            ret = self._actions['moveUp']( self )
+        
+        if not ret:
+            print "%s failed to automove..."%(self.name,)
+            self._actions['moveDown']( self )
+
+        return False
+        
