@@ -3,16 +3,19 @@
 
 from collections import namedtuple
 import pygame
+import numpy
 
 point = namedtuple( 'point', ['x', 'y'] )
 tileinfo = namedtuple( 'tileInfo', ['filename', 'symbol'] )
-unitinfo = namedtuple( 'unitInfo', ['filename', 'symbol', 'name'] )
-
+unitinfo = namedtuple( 'unitInfo', ['filename', 'symbol', 'name', 'attract'] )
 
 tileList = { 'grass': tileinfo( "images/grass.png", "s" ) }
-unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden' ), 
-             'badguy': unitinfo( "images/badguy.png", 'b', 'badguy' ),
-             'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn' ) }
+unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden',
+                                  {'maiden': 0.0, 'badguy': -5.0, 'unicorn': 10.0 } ), 
+             'badguy': unitinfo( "images/badguy.png", 'b', 'badguy',
+                                  {'maiden': 5.0, 'badguy': -1.0, 'unicorn': 10.0 } ), 
+             'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn',
+                                  {'maiden': 10.0, 'badguy': -12.5, 'unicorn': 0.0 } ) }
 
 def debugprint( str ):
     print str
@@ -47,6 +50,7 @@ class unit( uhgraphics ):
         self._dirty = True
         self._gamefield = gamefield
         self.name = info.name
+        self.info = info
         
     @property
     def pos( self ):
@@ -81,3 +85,30 @@ class unit( uhgraphics ):
         unitOffset = (gfOffset.x + tilePos.x, gfOffset.y + tilePos.y )
         screen.blit(self.screen, unitOffset)
         self._dirty = False
+
+def moveUnit( unit, unitList ):
+    moveDirection = [0.0, 0.0]
+
+    for otherUnit in unitList:
+        if unit == otherUnit:
+            continue
+
+        vect = [otherUnit.pos.x - unit.pos.x, otherUnit.pos.y - unit.pos.y]
+        dist = numpy.linalg.norm( vect )
+
+        force = unit.info.attract[otherUnit.name]/dist/dist
+        
+        moveInc = vect * 1/dist*force
+        moveDirection = moveDirection + moveInc
+        
+    if moveDirection[0] > 0.5:
+        unit.moveRight()
+    elif moveDirection[0] < -0.5:
+        unit.moveLeft()
+
+    if moveDirection[1] > 0.5:
+        unit.moveDown()
+    elif moveDirection[1] < -0.5:
+        unit.moveUp()
+    
+        
