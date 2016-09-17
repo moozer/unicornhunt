@@ -11,12 +11,12 @@ tileinfo = namedtuple( 'tileInfo', ['filename', 'symbol'] )
 unitinfo = namedtuple( 'unitInfo', ['filename', 'symbol', 'name', 'speed', 'attract'] )
 
 tileList = { 'grass': tileinfo( "images/grass.png", "s" ) }
-unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden', 450,
-                                  {'maiden': 0.0, 'badguy': -5.0, 'unicorn': 10.0 } ), 
-             'badguy': unitinfo( "images/badguy.png", 'b', 'badguy', 350,
-                                  {'maiden': 5.0, 'badguy': -1.0, 'unicorn': 10.0 } ), 
-             'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn', 250,
-                                  {'maiden': 10.0, 'badguy': -12.5, 'unicorn': 0.0 } ) }
+unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden', 350,
+                                  {'maiden': 0.0, 'badguy': -250.0, 'unicorn': 1000.0 } ), 
+             'badguy': unitinfo( "images/badguy.png", 'b', 'badguy', 250,
+                                  {'maiden': 5.0, 'badguy': -1.0, 'unicorn': 50.0 } ), 
+             'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn', 150,
+                                  {'maiden': 50.0, 'badguy': -12.5, 'unicorn': 0.0 } ) }
 
 class directions:
     up, down, left, right = range(4)
