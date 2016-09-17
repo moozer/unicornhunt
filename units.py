@@ -13,6 +13,7 @@ class unit( uhgraphics ):
         self.nextActionTime = time.time() * 1000 # in ms
         self._chatroom = chatroom
         
+        self.controlled = False
         self._addMoveActions()
         self._addFallActions()
         self._actions["idle"]      = action()
@@ -139,8 +140,8 @@ class unit( uhgraphics ):
         return self._actions[actionName]( self, units )
 
     def autoMove( self, otherUnits ):
-#        if self.nextActionTime > time.time()*1000:
-#            return False
+        if self.controlled:
+            return True
 
         moveDirection = [0.0, 0.0]
         for otherUnit in otherUnits:

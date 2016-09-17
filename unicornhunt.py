@@ -24,7 +24,7 @@ class game():
         # Initialise screen
         pygame.init()
         self.screen = pygame.display.set_mode(screenSize)
-        pygame.display.set_caption('game field test program')
+        pygame.display.set_caption('Unicorn hunt program')
 
         # --- chat room part -------
         self.cr = chatRoom( crSize )
@@ -51,9 +51,7 @@ class game():
         # --- units part -------
 
         self.popupMaidenWins = popup( (300, 300), "and they rode into the sunset..." )
-        self.popupEvilWins = popup( (300, 300), "Evil conquered beauty\nand darkness fell" )
-        
-
+        self.popupEvilWins = popup( (600, 300), "Evil conquered beauty and darkness fell" )
 
         # Blit everything to the screen
         self.cr.update( self.screen, self.crOffset)
@@ -62,10 +60,11 @@ class game():
         pygame.display.flip()
 
         # Event loop
-        self.unitToMove = self.badguy
 
         quitLoop = False
         self._state = gameStates.rungame
+        self.unitToMove = self.badguy
+        self.unitToMove.controlled = True
 
         while not quitLoop:
             refresh = False
@@ -74,10 +73,12 @@ class game():
                 quitLoop, refresh, nextState = self.runGame()
             elif self._state == gameStates.maidenwins:
                 quitLoop, refresh, nextState = self.runMaidenWins()
+            elif self._state == gameStates.evilwins:
+                quitLoop, refresh, nextState = self.runEvilWins()
             elif self._state == gameStates.quit:
                 quitLoop = True
             else:
-                print "current state is", state
+                print "current state is", self._state
 
             self._state = nextState
 
@@ -95,15 +96,22 @@ class game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_u:
                     self.cr.addComment( "system", "Now moving unicorn" )
+                    self.unitToMove.controlled = False
                     self.unitToMove = self.unicorn
+                    self.unitToMove.controlled = True
                 if event.key == pygame.K_b:
                     self.cr.addComment( "system", "Now moving badguy" )
+                    self.unitToMove.controlled = False
                     self.unitToMove = self.badguy
+                    self.unitToMove.controlled = True
                 if event.key == pygame.K_m:
                     self.cr.addComment( "system", "Now moving maiden" )
+                    self.unitToMove.controlled = False
                     self.unitToMove = self.maiden
+                    self.unitToMove.controlled = True
 
                 if event.key == pygame.K_LEFT:
+                    print self.unitToMove.name
                     self.unitToMove.doAction( "moveLeft", self.units )
                 if event.key == pygame.K_RIGHT:
                     self.unitToMove.doAction( "moveRight", self.units )
@@ -113,9 +121,11 @@ class game():
                     self.unitToMove.doAction( "moveUp", self.units)
         
             if event.type == E_EVILWINS:
+                self.cr.addComment( "system", "Evil wins!!" )
                 nextState = gameStates.evilwins
 
             if event.type == E_MAIDENWINS:
+                self.cr.addComment( "system", "Maiden wins!!" )
                 nextState = gameStates.maidenwins
 
         
@@ -169,7 +179,7 @@ class game():
     def runEvilWins( self ):
         quitLoop = False
         refresh = False
-        nextState = gameStates.maidenwins
+        nextState = gameStates.evilwins
 
         for event in pygame.event.get():
             if event.type == QUIT:
