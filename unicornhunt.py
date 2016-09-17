@@ -43,10 +43,22 @@ if __name__ == "__main__":
     unicorn = unit( unitList['unicorn'], gf, cr, point(4,4) )
     cr.addMessage( "system", "Unicorn at %s"%( unicorn.pos, ) )
     unicorn.action["idle"] = eatGrass()    
+    unicorn.action["moveLeft"]  = move( 250, directions.left )    
+    unicorn.action["moveRight"] = move( 250, directions.right )    
+    unicorn.action["moveUp"]    = move( 250, directions.up )    
+    unicorn.action["moveDown"]  = move( 250, directions.down )    
     badguy = unit( unitList['badguy'], gf, cr, point(10,10) )
     cr.addMessage( "system", "Badguy at %s"%( badguy.pos, ) )
+    badguy.action["moveLeft"]  = move( 350, directions.left )    
+    badguy.action["moveRight"] = move( 350, directions.right )    
+    badguy.action["moveUp"]    = move( 350, directions.up )    
+    badguy.action["moveDown"]  = move( 350, directions.down )    
     maiden = unit( unitList['maiden'], gf, cr, point(20,20) )
     cr.addMessage( "system", "maiden at %s"%( maiden.pos, ) )
+    maiden.action["moveLeft"]  = move( 450, directions.left )    
+    maiden.action["moveRight"] = move( 450, directions.right )    
+    maiden.action["moveUp"]    = move( 450, directions.up )    
+    maiden.action["moveDown"]  = move( 450, directions.down )    
     # --- units part -------
 
 
@@ -77,13 +89,13 @@ if __name__ == "__main__":
                     unitToMove = maiden
 
                 if event.key == pygame.K_LEFT:
-                    unitToMove.moveLeft()
+                    unitToMove.doAction( "moveLeft" )
                 if event.key == pygame.K_RIGHT:
-                    unitToMove.moveRight()
+                    unitToMove.doAction( "moveRight" )
                 if event.key == pygame.K_DOWN:
-                    unitToMove.moveDown()
+                    unitToMove.doAction( "moveDown" )
                 if event.key == pygame.K_UP:
-                    unitToMove.moveUp()
+                    unitToMove.doAction( "moveUp")
         
         if not moveUnit( unicorn, [badguy, maiden] ):
             unicorn.doAction( "idle" )
@@ -97,7 +109,7 @@ if __name__ == "__main__":
             #print "gf update"
             gf.update( screen, gfOffset)
             for unit in [unicorn, maiden, badguy]:
-                print "%s update"%(unit.name, )
+                #print "%s update"%(unit.name, )
                 unit.update( screen, gfOffset)
             refresh = True
             

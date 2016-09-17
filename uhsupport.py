@@ -18,6 +18,8 @@ unitList = { 'maiden': unitinfo( "images/princess.png", 'm', 'maiden',
              'unicorn': unitinfo( "images/unicorn.png", 'u', 'unicorn',
                                   {'maiden': 10.0, 'badguy': -12.5, 'unicorn': 0.0 } ) }
 
+class directions:
+    up, down, left, right = range(4)
 
 def debugprint( str ):
     print str

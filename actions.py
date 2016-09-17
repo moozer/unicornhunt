@@ -1,5 +1,6 @@
 # possible actions
 import time, random
+from uhsupport import *
 
 class action():
     _time = 500
@@ -41,3 +42,19 @@ class eatGrass( action ):
             unit.moveUp()
         elif move[1] == 1:
             unit.moveDown()
+
+class move( action ):
+    def __init__( self, time, direction ):
+        self._time = time
+        self._direction = direction
+        
+    def _doAction( self, unit ):
+        if self._direction == directions.right:
+            unit.moveRight()
+        elif self._direction == directions.left:
+            unit.moveLeft()
+        elif self._direction == directions.down:
+            unit.moveDown()
+        elif self._direction == directions.up:
+            unit.moveUp()
+        
