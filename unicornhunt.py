@@ -99,14 +99,14 @@ class game():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_u:
-                    dprint( "Now moving unicorn" )
-                    self.unitToMove = unicorn
+                    self.cr.addComment( "system", "Now moving unicorn" )
+                    self.unitToMove = self.unicorn
                 if event.key == pygame.K_b:
-                    dprint( "Now moving badguy" )
-                    self.unitToMove = badguy
+                    self.cr.addComment( "system", "Now moving badguy" )
+                    self.unitToMove = self.badguy
                 if event.key == pygame.K_m:
-                    dprint( "Now moving maiden" )
-                    self.unitToMove = maiden
+                    self.cr.addComment( "system", "Now moving maiden" )
+                    self.unitToMove = self.maiden
 
                 if event.key == pygame.K_LEFT:
                     self.unitToMove.doAction( "moveLeft", self.units )
