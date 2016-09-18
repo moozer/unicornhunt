@@ -235,7 +235,7 @@ class game():
                     quitLoop = True
 
                 if event.key == pygame.K_SPACE:
-                    nextState = gameStates.runGame
+                    nextState = gameStates.rungame
             
         if refresh:
             pygame.display.flip()
