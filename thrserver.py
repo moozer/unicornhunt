@@ -6,8 +6,8 @@ from uhsupport import *
 class keyReceiver():
     def __init__( self, ip, port, user ):
         # Bind the socket to the address given on the command line
-        self.server_name = '127.0.0.1'
-        self.server_address = (self.server_name, 10000)
+        self.server_name = ip
+        self.server_address = (self.server_name, port)
         self._user = user
 
     def _ProcessKeys( self, keys ):
@@ -27,7 +27,7 @@ class keyReceiver():
         # Create a TCP/IP socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        print >>sys.stderr, 'starting up on %s port %s' % self.server_address
+        print >>sys.stderr, 'User %s starting up on %s port %s' % (self._user, self.server_address[0], self.server_address[1] ) 
         sock.bind( self.server_address)
         sock.listen(1)
 
