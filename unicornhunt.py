@@ -63,11 +63,12 @@ class game():
 
         # remote access
         kr = {}
-        for user in ["userA", "userB"]:
-            kr[user] = keyReceiver( '127.0.0.1', remoteEvent[user]['port'], user )
-            kr_t = threading.Thread(name="%s_remote"%(user, ), target=kr[user].listen)
-            kr_t.setDaemon( True )
-            kr_t.start()
+        kr_thr = {}
+        for user in ["userA", "userB", "userC"]:
+            kr[user] = keyReceiver( '0.0.0.0', remoteEvent[user]['port'], user )
+            kr_thr[user] = threading.Thread(name="%s_remote"%(user, ), target=kr[user].listen)
+            kr_thr[user].setDaemon( True )
+            kr_thr[user].start()
             self.cr.addMessage( "system", "%s on port %d"%(user, remoteEvent[user]['port']) )
 
         pygame.display.flip()
@@ -110,8 +111,13 @@ class game():
             print event
             quitLoop = self.checkQuit( event )
 
-            if self.remoteA_enable:
-                self.handleRemoteEvents( "userA", self.badguy, event )
+            #if self.remoteA_enable:
+            self.handleRemoteEvents( "userA", self.badguy, event )
+#            self.handleRemoteEvents( "userB", self.maiden, event )
+#            self.handleRemoteEvents( "userC", self.unicorn, event )
+#            self.unitToMove.controlled = True
+#            self.unitToMove.controlled = True
+#            self.unitToMove.controlled = True
                 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_u:
