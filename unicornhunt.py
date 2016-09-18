@@ -50,6 +50,10 @@ class game():
         self.cr.addMessage( "system", "maiden at %s"%( self.maiden.pos, ) )
         
         self.units = [self.badguy, self.maiden, self.unicorn]
+        for u in self.units:
+            u.controlled = True
+
+        self.controlled = False
 
         # --- units part -------
 
