@@ -64,7 +64,6 @@ class game():
         if self.enableRemoteAccess:
             self.spinupRemoteAccess()
 
-
         pygame.display.flip()
         # Event loop
 
@@ -116,17 +115,10 @@ class game():
             if event.type == pygame.KEYDOWN:
                 if not self.enableRemoteAccess:
                     self.forceLocalControl( event )
-                    
-                if event.key == pygame.K_LEFT:
-                    print self.unitToMove.name
-                    self.unitToMove.doAction( "moveLeft", self.units )
-                if event.key == pygame.K_RIGHT:
-                    self.unitToMove.doAction( "moveRight", self.units )
-                if event.key == pygame.K_DOWN:
-                    self.unitToMove.doAction( "moveDown", self.units )
-                if event.key == pygame.K_UP:
-                    self.unitToMove.doAction( "moveUp", self.units)
 
+            for unit in self.units:
+                if unit.controlled:
+                    self.handleLocalUnitKeyEvents( event, unit )
         
             if event.type == E_EVILWINS:
                 self.cr.addComment( "system", "Evil wins!!" )
@@ -138,8 +130,9 @@ class game():
 
         
         for unit in self.units:
-            if not unit.autoMove( self.units ):
-                unit.doAction( "idle", self.units )
+            if not unit.controlled:
+                if not unit.autoMove( self.units ):
+                    unit.doAction( "idle", self.units )
 
         if self.gf.dirty:
             self.gf.update( self.screen, self.gfOffset)
@@ -266,6 +259,19 @@ class game():
         
         self.unitToMove.controlled = True
 
+    def handleLocalUnitKeyEvents( self, event, unit ):
+        if event.type == pygame.KEYDOWN:
+            if event.key == localKeyEvent[unit.name]['up']:
+                unit.doAction( "moveUp", self.units )
+            elif event.key == localKeyEvent[unit.name]['down']:
+                unit.doAction( "moveDown", self.units )
+            elif event.key == localKeyEvent[unit.name]['left']:
+                unit.doAction( "moveLeft", self.units )
+            elif event.key == localKeyEvent[unit.name]['right']:
+                unit.doAction( "moveRight", self.units )
+            else:
+                print "not moving", unit.name
+ 
 if __name__ == "__main__":
     g = game()
 #    g.run()

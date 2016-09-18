@@ -52,6 +52,14 @@ remoteEvent = { "userA": {'up': E_REMOTE_A_UP, 'down': E_REMOTE_A_DOWN ,
                           'right': E_REMOTE_C_RIGHT, 'left': E_REMOTE_C_LEFT,
                           'port': 10002} }
 
+localKeyEvent = { "badguy":  {'up':    pygame.K_UP,  'down': pygame.K_DOWN , 
+                              'right': pygame.K_RIGHT, 'left': pygame.K_LEFT },
+                  "unicorn": {'up':    pygame.K_w, 'down': pygame.K_s , 
+                              'right': pygame.K_d, 'left': pygame.K_a },
+                  "maiden":  {'up':    pygame.K_i, 'down': pygame.K_k , 
+                              'right': pygame.K_l, 'left': pygame.K_j } }
+
+
 gameOverMatrix = { 'maiden':  { 'unicorn': E_MAIDENWINS },
                    'unicorn': { 'maiden': E_MAIDENWINS, 'badguy': E_EVILWINS },
                    'badguy':  { 'unicorn': E_EVILWINS } }
