@@ -81,7 +81,7 @@ class game():
         self.remoteA_enable = True
         self.remoteB_enable = True
         
-        print "press space to start"
+        print "press space to start, q to quit"
         
         while not quitLoop:
             refresh = False
@@ -108,9 +108,7 @@ class game():
 
         for event in pygame.event.get():
             print event
-            if event.type == QUIT:
-                print "Quitting..."
-                quitLoop = True
+            quitLoop = self.checkQuit( event )
 
             if self.remoteA_enable:
                 self.handleRemoteEvents( "userA", self.badguy, event )
@@ -173,6 +171,10 @@ class game():
 
         return quitLoop, refresh, nextState
 
+    def checkQuit( self, event ):
+        if event.type == QUIT:
+            return True
+        return False
 
     def runMaidenWins( self ):
         quitLoop = False
@@ -180,8 +182,7 @@ class game():
         nextState = gameStates.maidenwins
 
         for event in pygame.event.get():
-            if event.type == QUIT:
-                quitLoop = True
+            quitLoop = self.checkQuit( event )
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
@@ -204,8 +205,7 @@ class game():
         nextState = gameStates.evilwins
 
         for event in pygame.event.get():
-            if event.type == QUIT:
-                quitLoop = True
+            quitLoop = self.checkQuit( event )
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
@@ -227,8 +227,7 @@ class game():
         nextState = gameStates.startup
 
         for event in pygame.event.get():
-            if event.type == QUIT:
-                quitLoop = True
+            quitLoop = self.checkQuit( event )
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
