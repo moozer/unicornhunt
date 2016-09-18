@@ -74,18 +74,22 @@ class game():
         # Event loop
 
         quitLoop = False
-        self._state = gameStates.rungame
+        self._state = gameStates.startup
         self.unitToMove = self.badguy
         self.unitToMove.controlled = True
 
         self.remoteA_enable = True
         self.remoteB_enable = True
         
+        print "press space to start"
+        
         while not quitLoop:
             refresh = False
             
             if self._state == gameStates.rungame:
                 quitLoop, refresh, nextState = self.runGame()
+            elif self._state == gameStates.startup:
+                quitLoop, refresh, nextState = self.runStartup()
             elif self._state == gameStates.maidenwins:
                 quitLoop, refresh, nextState = self.runMaidenWins()
             elif self._state == gameStates.evilwins:
@@ -211,6 +215,28 @@ class game():
             self.popupEvilWins.update( self.screen, self.gfOffset)
             refresh = True
                             
+        if refresh:
+            pygame.display.flip()
+            refresh = False
+
+        return quitLoop, refresh, nextState
+
+    def runStartup( self ):
+        quitLoop = False
+        refresh = False
+        nextState = gameStates.startup
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                quitLoop = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    quitLoop = True
+
+                if event.key == pygame.K_SPACE:
+                    nextState = gameStates.runGame
+            
         if refresh:
             pygame.display.flip()
             refresh = False
