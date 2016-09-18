@@ -60,16 +60,10 @@ class game():
         self.cr.update( self.screen, self.crOffset)
         self.gf.update( self.screen, self.crOffset)
 
+        self.enableRemoteAccess = False
+        if self.enableRemoteAccess:
+            self.spinupRemoteAccess()
 
-        # remote access
-        kr = {}
-        kr_thr = {}
-        for user in ["userA", "userB", "userC"]:
-            kr[user] = keyReceiver( '0.0.0.0', remoteEvent[user]['port'], user )
-            kr_thr[user] = threading.Thread(name="%s_remote"%(user, ), target=kr[user].listen)
-            kr_thr[user].setDaemon( True )
-            kr_thr[user].start()
-            self.cr.addMessage( "system", "%s on port %d"%(user, remoteEvent[user]['port']) )
 
         pygame.display.flip()
         # Event loop
@@ -111,31 +105,18 @@ class game():
             print event
             quitLoop = self.checkQuit( event )
 
-            #if self.remoteA_enable:
-            self.handleRemoteEvents( "userA", self.badguy, event )
-#            self.handleRemoteEvents( "userB", self.maiden, event )
-#            self.handleRemoteEvents( "userC", self.unicorn, event )
-#            self.unitToMove.controlled = True
-#            self.unitToMove.controlled = True
-#            self.unitToMove.controlled = True
-                
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_u:
-                    self.cr.addComment( "system", "Now moving unicorn" )
-                    self.unitToMove.controlled = False
-                    self.unitToMove = self.unicorn
-                    self.unitToMove.controlled = True
-                if event.key == pygame.K_b:
-                    self.cr.addComment( "system", "Now moving badguy" )
-                    self.unitToMove.controlled = False
-                    self.unitToMove = self.badguy
-                    self.unitToMove.controlled = True
-                if event.key == pygame.K_m:
-                    self.cr.addComment( "system", "Now moving maiden" )
-                    self.unitToMove.controlled = False
-                    self.unitToMove = self.maiden
-                    self.unitToMove.controlled = True
+            if self.enableRemoteAccess:
+                self.handleRemoteEvents( "userA", self.badguy, event )
+                self.handleRemoteEvents( "userB", self.maiden, event )
+                self.handleRemoteEvents( "userC", self.unicorn, event )
+                self.unitToMove.controlled = True
+                self.unitToMove.controlled = True
+                self.unitToMove.controlled = True
 
+            if event.type == pygame.KEYDOWN:
+                if not self.enableRemoteAccess:
+                    self.forceLocalControl( event )
+                    
                 if event.key == pygame.K_LEFT:
                     print self.unitToMove.name
                     self.unitToMove.doAction( "moveLeft", self.units )
@@ -145,6 +126,7 @@ class game():
                     self.unitToMove.doAction( "moveDown", self.units )
                 if event.key == pygame.K_UP:
                     self.unitToMove.doAction( "moveUp", self.units)
+
         
             if event.type == E_EVILWINS:
                 self.cr.addComment( "system", "Evil wins!!" )
@@ -258,7 +240,31 @@ class game():
         elif event.type == remoteEvent[user]['right']:
             unit.doAction( "moveRight", self.units )
 
+    def spinupRemoteAccess( self ):
+        # remote access
+        kr = {}
+        kr_thr = {}
+        for user in ["userA", "userB", "userC"]:
+            kr[user] = keyReceiver( '0.0.0.0', remoteEvent[user]['port'], user )
+            kr_thr[user] = threading.Thread(name="%s_remote"%(user, ), target=kr[user].listen)
+            kr_thr[user].setDaemon( True )
+            kr_thr[user].start()
+            self.cr.addMessage( "system", "%s on port %d"%(user, remoteEvent[user]['port']) )
 
+    def forceLocalControl( self, event ):
+        self.unitToMove.controlled = False
+        
+        if event.key == pygame.K_u:
+            self.cr.addComment( "system", "Now moving unicorn" )
+            self.unitToMove = self.unicorn
+        elif event.key == pygame.K_b:
+            self.cr.addComment( "system", "Now moving badguy" )
+            self.unitToMove = self.badguy
+        elif event.key == pygame.K_m:
+            self.cr.addComment( "system", "Now moving maiden" )
+            self.unitToMove = self.maiden
+        
+        self.unitToMove.controlled = True
 
 if __name__ == "__main__":
     g = game()
