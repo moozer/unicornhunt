@@ -51,9 +51,9 @@ class game():
         
         self.units = [self.badguy, self.maiden, self.unicorn]
         for u in self.units:
-            u.controlled = True
+            u.controlled = False
 
-        self.controlled = False
+        self.maiden.controlled = False
 
         # --- units part -------
 
@@ -74,7 +74,7 @@ class game():
         quitLoop = False
         self._state = gameStates.startup
         self.unitToMove = self.badguy
-        self.unitToMove.controlled = True
+#        self.unitToMove.controlled = True
 
         self.remoteA_enable = True
         self.remoteB_enable = True
