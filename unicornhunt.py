@@ -51,7 +51,7 @@ class game():
         
         self.units = [self.badguy, self.maiden, self.unicorn]
         for u in self.units:
-            u.controlled = False
+            u.controlled = True
 
         self.maiden.controlled = False
 
